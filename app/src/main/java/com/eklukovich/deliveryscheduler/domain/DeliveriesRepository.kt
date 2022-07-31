@@ -14,7 +14,7 @@ class DeliveriesRepository(
     private val dataSource: DataSource<DeliveriesResponse> = DeliveriesDataSource()
 ) {
 
-    fun fetchUnscheduledDeliveries(): Flow<Deliveries> {
-        return dataSource.fetchData().map { it.toDeliveries() }
+    fun fetchUnscheduledDeliveries(): Flow<Deliveries?> {
+        return dataSource.fetchData().map { it?.toDeliveries() }
     }
 }

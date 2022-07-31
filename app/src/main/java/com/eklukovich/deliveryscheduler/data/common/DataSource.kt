@@ -10,6 +10,8 @@ interface DataSource<Result> {
 
     /**
      * Executes the data fetching functionality and returns the results as a [Flow]
+     *
+     * @return flow of results or null if an error was encountered
      */
-    fun fetchData(): Flow<Result>
+    fun fetchData(): Flow<Result?>
 }

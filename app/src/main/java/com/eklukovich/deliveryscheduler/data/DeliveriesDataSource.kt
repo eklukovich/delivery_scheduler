@@ -1,13 +1,17 @@
 package com.eklukovich.deliveryscheduler.data
 
+import android.util.Log
 import com.eklukovich.deliveryscheduler.data.common.DataSource
 import com.eklukovich.deliveryscheduler.data.model.DeliveriesResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 class DeliveriesDataSource: DataSource<DeliveriesResponse> {
+
+    private val tag = DeliveriesDataSource::class.java.simpleName
 
     // Hardcoding, but this would be fetched from an API
     private val jsonData = """
@@ -39,10 +43,15 @@ class DeliveriesDataSource: DataSource<DeliveriesResponse> {
         }
     """.trimIndent()
 
-    override fun fetchData(): Flow<DeliveriesResponse> {
+    override fun fetchData(): Flow<DeliveriesResponse?> {
         return flow {
-            val deliveries = Json.decodeFromString<DeliveriesResponse>(jsonData)
-            emit(deliveries)
+            try {
+                val deliveries = Json.decodeFromString<DeliveriesResponse>(jsonData)
+                emit(deliveries)
+            } catch (ex: SerializationException) {
+                Log.e(tag, "Failed to deserialize response, exception: ${ex.message}")
+                emit(null)
+            }
         }
     }
 }
