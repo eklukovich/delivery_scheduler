@@ -14,6 +14,11 @@ class ListDriversFragment : Fragment(R.layout.list_drivers_fragment) {
 
     private val viewModel: ListDriversViewModel by viewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.loadData()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
