@@ -1,9 +1,9 @@
-package com.eklukovich.deliveryscheduler.domain
+package com.eklukovich.deliveryscheduler.repository
 
 import com.eklukovich.deliveryscheduler.data.model.DeliveriesResponse
-import com.eklukovich.deliveryscheduler.domain.model.Deliveries
-import com.eklukovich.deliveryscheduler.domain.model.Driver
-import com.eklukovich.deliveryscheduler.domain.model.Shipment
+import com.eklukovich.deliveryscheduler.repository.model.Deliveries
+import com.eklukovich.deliveryscheduler.repository.model.Driver
+import com.eklukovich.deliveryscheduler.repository.model.Shipment
 
 internal fun DeliveriesResponse.toDeliveries(): Deliveries {
     return Deliveries(

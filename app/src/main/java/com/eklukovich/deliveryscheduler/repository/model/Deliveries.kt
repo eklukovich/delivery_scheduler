@@ -1,4 +1,4 @@
-package com.eklukovich.deliveryscheduler.domain.model
+package com.eklukovich.deliveryscheduler.repository.model
 
 /**
  * Domain model that contains the data for unscheduled deliveries

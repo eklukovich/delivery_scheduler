@@ -3,7 +3,7 @@ package com.eklukovich.deliveryscheduler.ui.drivers.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.eklukovich.deliveryscheduler.domain.model.Driver
+import com.eklukovich.deliveryscheduler.repository.model.Driver
 
 /**
  * Recycler adapter class to display a list of drivers

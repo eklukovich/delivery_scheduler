@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eklukovich.deliveryscheduler.databinding.DriverListItemBinding
-import com.eklukovich.deliveryscheduler.domain.model.Driver
+import com.eklukovich.deliveryscheduler.repository.model.Driver
 
 /**
  * Recycler ViewHolder class that displays a single driver

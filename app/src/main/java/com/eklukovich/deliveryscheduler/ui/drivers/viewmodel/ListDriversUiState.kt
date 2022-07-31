@@ -1,6 +1,6 @@
 package com.eklukovich.deliveryscheduler.ui.drivers.viewmodel
 
-import com.eklukovich.deliveryscheduler.domain.model.Driver
+import com.eklukovich.deliveryscheduler.repository.model.Driver
 
 /**
  * Sealed class to model the possible UI states for the drivers list screen
