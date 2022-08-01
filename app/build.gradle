@@ -45,6 +45,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
 
+    // Graph
+    implementation 'org.jgrapht:jgrapht-core:1.5.1'
+
     // JSON
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3"
 
