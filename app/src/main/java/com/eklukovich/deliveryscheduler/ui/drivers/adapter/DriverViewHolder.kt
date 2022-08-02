@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.eklukovich.deliveryscheduler.databinding.DriverListItemBinding
 import com.eklukovich.deliveryscheduler.repository.model.Driver
+import com.eklukovich.deliveryscheduler.ui.drivers.viewmodel.DriverListItemUiState
 
 /**
  * Recycler ViewHolder class that displays a single driver
@@ -20,11 +21,13 @@ internal class DriverViewHolder(
         }
     }
 
-    fun bind(driver: Driver, onDriverItemClicked: (Driver) -> Unit) {
+    fun bind(uiState: DriverListItemUiState, onDriverItemClicked: (Driver) -> Unit) {
         // Set click listener
-        itemView.setOnClickListener { onDriverItemClicked(driver) }
+        itemView.setOnClickListener { onDriverItemClicked(uiState.driver) }
 
         // Set fields
-        binding.driverNameText.text = driver.name
+        binding.driverNameText.text = uiState.driver.name
+        binding.driverShipmentAddressText.text = uiState.scheduledDelivery?.shipment?.address ?: "--"
+        binding.driverScheduledIcon.isSelected = uiState.scheduledDelivery != null
     }
 }

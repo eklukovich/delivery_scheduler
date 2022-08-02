@@ -7,6 +7,16 @@
     android:layout_height="?android:listPreferredItemHeight"
     android:background="?android:attr/selectableItemBackground">
 
+    <ImageView
+        android:id="@+id/driver_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:src="@drawable/ic_truck"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/driver_name_text"
         android:layout_width="0dp"
@@ -16,10 +26,35 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/driver_shipment_address_text"
+        app:layout_constraintEnd_toStartOf="@+id/driver_scheduled_icon"
+        app:layout_constraintStart_toEndOf="@+id/driver_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="First Last" />
+
+    <TextView
+        android:id="@+id/driver_shipment_address_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingHorizontal="@dimen/view_edge_spacing"
+        android:textColor="@color/cardview_dark_background"
+        android:textSize="14sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/driver_scheduled_icon"
+        app:layout_constraintStart_toEndOf="@+id/driver_icon"
+        app:layout_constraintTop_toBottomOf="@+id/driver_name_text"
+        tools:text="Shipment Address" />
+
+    <ImageView
+        android:id="@+id/driver_scheduled_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/view_edge_spacing"
+        android:src="@drawable/checked_icon_selector"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

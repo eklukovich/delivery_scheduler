@@ -2,4 +2,5 @@
     <string name="app_name">Delivery Scheduler</string>
 
     <string name="deliveries_loading_failed">Error loading deliveries</string>
+    <string name="deliveries_scheduling_failed">Error scheduling deliveries</string>
 </resources>

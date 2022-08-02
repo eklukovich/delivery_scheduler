@@ -7,7 +7,10 @@ import com.eklukovich.deliveryscheduler.repository.model.Driver
 import com.eklukovich.deliveryscheduler.scheduler.DeliveryScheduler
 import com.eklukovich.deliveryscheduler.scheduler.HungarianAlgorithmDeliveryScheduler
 import com.eklukovich.deliveryscheduler.scheduler.model.DeliverySchedulerException
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -19,15 +22,29 @@ internal class ListDriversViewModel(
     private val _uiState = MutableStateFlow<ListDriversUiState>(ListDriversUiState.Loading)
     val uiState: StateFlow<ListDriversUiState> get() = _uiState
 
+    private val _event = MutableSharedFlow<ListDriversEvent>()
+    val event: SharedFlow<ListDriversEvent> get() = _event
+
     init {
         // Automatically load data and observe for data changes
         loadAndObserveData()
     }
 
     fun onDriverSelected(driver: Driver) {
-        val result = deliveryScheduler.getScheduleForDriver(driver) ?: return
-        // TODO - replace with event
-        println("FINDME - Driver: ${result.driver.name} | Shipment: ${result.shipment.address}")
+        val scheduledDelivery = deliveryScheduler.getScheduleForDriver(driver) ?: return
+        val currentState = (_uiState.value as? ListDriversUiState.Success) ?: return
+
+        // Update the driver list
+        val updatedList = currentState.drivers.toMutableList()
+            .map { driverUiState ->
+                if(driverUiState.driver == driver) {
+                    DriverListItemUiState(driver = driver, scheduledDelivery = scheduledDelivery)
+                } else {
+                    driverUiState
+            }
+        }
+
+        _uiState.value = currentState.copy(drivers = updatedList)
     }
 
     private fun loadAndObserveData() {
@@ -43,15 +60,18 @@ internal class ListDriversViewModel(
                     return@collect
                 }
 
-                // Update state flow with the latest drivers
-                _uiState.value = ListDriversUiState.Success(drivers = deliveries.drivers)
-
                 // Schedule all the new deliveries
                 try {
                     deliveryScheduler.scheduleDeliveries(deliveries)
                 } catch (ex: DeliverySchedulerException) {
-                    // TODO: Send error event
+                    _event.tryEmit(ListDriversEvent.SchedulingFailed)
+                    _uiState.value = ListDriversUiState.Error
+                    return@collect
                 }
+
+                // Update state flow with the latest drivers
+                val listItems = deliveries.drivers.map { DriverListItemUiState(driver = it) }
+                _uiState.value = ListDriversUiState.Success(drivers = listItems)
             }
         }
     }

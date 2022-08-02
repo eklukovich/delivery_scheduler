@@ -8,10 +8,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.eklukovich.deliveryscheduler.R
 import com.eklukovich.deliveryscheduler.databinding.ListDriversFragmentBinding
 import com.eklukovich.deliveryscheduler.ui.drivers.adapter.ListDriversAdapter
+import com.eklukovich.deliveryscheduler.ui.drivers.viewmodel.ListDriversEvent
 import com.eklukovich.deliveryscheduler.ui.drivers.viewmodel.ListDriversUiState
 import com.eklukovich.deliveryscheduler.ui.drivers.viewmodel.ListDriversViewModel
 import com.eklukovich.deliveryscheduler.util.viewBinding
@@ -43,6 +45,9 @@ class ListDriversFragment : Fragment(R.layout.list_drivers_fragment) {
         // Layout Manager
         binding.listDriversRecyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
+        // Decorator
+        binding.listDriversRecyclerView.addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
+
         // Adapter
         binding.listDriversRecyclerView.adapter = ListDriversAdapter(
             onDriverItemClicked = { driver -> viewModel.onDriverSelected(driver) }
@@ -57,6 +62,13 @@ class ListDriversFragment : Fragment(R.layout.list_drivers_fragment) {
                 }
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.event.collect { event ->
+                    handleEvent(event)
+                }
+            }
+        }
     }
 
     private fun updateUiState(uiState: ListDriversUiState) {
@@ -66,6 +78,12 @@ class ListDriversFragment : Fragment(R.layout.list_drivers_fragment) {
             is ListDriversUiState.Success -> adapter?.submitList(uiState.drivers)
             is ListDriversUiState.Loading -> return
             is ListDriversUiState.Error -> Snackbar.make(binding.root, R.string.deliveries_loading_failed, Snackbar.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun handleEvent(event: ListDriversEvent) {
+        when (event) {
+            is ListDriversEvent.SchedulingFailed -> Snackbar.make(binding.root, R.string.deliveries_scheduling_failed, Snackbar.LENGTH_SHORT).show()
         }
     }
 }

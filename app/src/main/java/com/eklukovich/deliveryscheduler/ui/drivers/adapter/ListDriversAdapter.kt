@@ -4,24 +4,25 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.eklukovich.deliveryscheduler.repository.model.Driver
+import com.eklukovich.deliveryscheduler.ui.drivers.viewmodel.DriverListItemUiState
 
 /**
  * Recycler adapter class to display a list of drivers
  */
 internal class ListDriversAdapter(
     private val onDriverItemClicked: (Driver) -> Unit
-): ListAdapter<Driver, DriverViewHolder>(DIFF_CALLBACK) {
+): ListAdapter<DriverListItemUiState, DriverViewHolder>(DIFF_CALLBACK) {
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Driver>() {
-            override fun areItemsTheSame(oldItem: Driver, newItem: Driver): Boolean {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DriverListItemUiState>() {
+            override fun areItemsTheSame(oldItem: DriverListItemUiState, newItem: DriverListItemUiState): Boolean {
                 // Normally compare item ids or some unique value, but the driver's name should be sufficient
-                return oldItem.name == newItem.name
+                return oldItem.driver.name == newItem.driver.name
             }
 
-            override fun areContentsTheSame(oldItem: Driver, newItem: Driver): Boolean {
+            override fun areContentsTheSame(oldItem: DriverListItemUiState, newItem: DriverListItemUiState): Boolean {
                 // Compare only the data we are going to display
-                return oldItem.name == newItem.name
+                return oldItem.driver == newItem.driver && oldItem.scheduledDelivery == newItem.scheduledDelivery
             }
         }
     }
@@ -31,10 +32,10 @@ internal class ListDriversAdapter(
     }
 
     override fun onBindViewHolder(holder: DriverViewHolder, position: Int) {
-        val driver = currentList.getOrNull(position) ?: return
+        val uiState = currentList.getOrNull(position) ?: return
 
         holder.bind(
-            driver = driver,
+            uiState = uiState,
             onDriverItemClicked = onDriverItemClicked
         )
     }
