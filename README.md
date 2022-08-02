@@ -37,7 +37,7 @@ Scheduling the drivers to shipments for maximum suitability can be categorized a
 
 This application uses the Hungarian Algorithm to match the drivers to shipments, and implements it using the [JGraphT Java library](https://jgrapht.org/javadoc/org.jgrapht.core/org/jgrapht/alg/matching/KuhnMunkresMinimalWeightBipartitePerfectMatching.html). This library uses a bipartite graph for the implementation and requires that there are an equal number of drivers and shipments. The graph is constructed with two sets of vertices, the drivers and the shipments, and each driver-shipment vertex is connected with a weighted edge, where the weight is the suitability score. The Hungarian algorithm finds the minimized cost, but the objective is to find the maximized suitability score. The maximized problem can be converted over to a minimized problem by simply subtracting the maximum suitability score value from each suitability score. This transformation gives the algorithm the required input for the desired objecticve result.
 
-# Installation
+## Installation
 1. Install [Android Studio](https://developer.android.com/studio) if not already install
 2. Clone this repository to a desired directory
 3. Open Android Studio and open the `delivery_scheduler` project directory
@@ -45,7 +45,7 @@ This application uses the Hungarian Algorithm to match the drivers to shipments,
 	- Open the `Run` tab at the top menu and select `Run 'app'`
 5.  The `Delivery Scheduler` app will automatically open once installed
 
-# Usage
+## Usage
 The app displays a list of drivers and will initially not have shipment assigned to them. Tap any of the drivers and the assigned shipment address for that driver will appear underneath the driver's name and a green check mark will appear.
 
 <p align="left">
