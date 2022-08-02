@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.eklukovich.deliveryscheduler.R
 import com.eklukovich.deliveryscheduler.databinding.ListDriversFragmentBinding
 import com.eklukovich.deliveryscheduler.ui.drivers.adapter.ListDriversAdapter
-import com.eklukovich.deliveryscheduler.ui.drivers.viewmodel.ListDriversEvent
 import com.eklukovich.deliveryscheduler.ui.drivers.viewmodel.ListDriversUiState
 import com.eklukovich.deliveryscheduler.ui.drivers.viewmodel.ListDriversViewModel
 import com.eklukovich.deliveryscheduler.util.viewBinding
@@ -62,13 +61,6 @@ class ListDriversFragment : Fragment(R.layout.list_drivers_fragment) {
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.event.collect { event ->
-                    handleEvent(event)
-                }
-            }
-        }
     }
 
     private fun updateUiState(uiState: ListDriversUiState) {
@@ -77,13 +69,16 @@ class ListDriversFragment : Fragment(R.layout.list_drivers_fragment) {
         when (uiState) {
             is ListDriversUiState.Success -> adapter?.submitList(uiState.drivers)
             is ListDriversUiState.Loading -> return
-            is ListDriversUiState.Error -> Snackbar.make(binding.root, R.string.deliveries_loading_failed, Snackbar.LENGTH_SHORT).show()
+            is ListDriversUiState.Error -> handleError(uiState)
         }
     }
 
-    private fun handleEvent(event: ListDriversEvent) {
-        when (event) {
-            is ListDriversEvent.SchedulingFailed -> Snackbar.make(binding.root, R.string.deliveries_scheduling_failed, Snackbar.LENGTH_SHORT).show()
+    private fun handleError(error: ListDriversUiState.Error) {
+        val message = when (error) {
+            is ListDriversUiState.Error.LoadingFailed -> R.string.deliveries_loading_failed
+            is ListDriversUiState.Error.SchedulingFailed -> R.string.deliveries_scheduling_failed
         }
+
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 }

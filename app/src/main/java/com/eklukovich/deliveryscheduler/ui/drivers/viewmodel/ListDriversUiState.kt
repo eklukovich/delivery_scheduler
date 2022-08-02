@@ -9,7 +9,11 @@ import com.eklukovich.deliveryscheduler.scheduler.model.ScheduledDelivery
 internal sealed class ListDriversUiState {
     data class Success(val drivers: List<DriverListItemUiState>): ListDriversUiState()
     object Loading: ListDriversUiState()
-    object Error: ListDriversUiState()
+
+    sealed class Error: ListDriversUiState() {
+        object SchedulingFailed: Error()
+        object LoadingFailed: Error()
+    }
 }
 
 internal data class DriverListItemUiState(

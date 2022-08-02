@@ -7,9 +7,7 @@ import com.eklukovich.deliveryscheduler.repository.model.Driver
 import com.eklukovich.deliveryscheduler.scheduler.DeliveryScheduler
 import com.eklukovich.deliveryscheduler.scheduler.HungarianAlgorithmDeliveryScheduler
 import com.eklukovich.deliveryscheduler.scheduler.model.DeliverySchedulerException
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -20,9 +18,6 @@ internal class ListDriversViewModel(
 
     private val _uiState = MutableStateFlow<ListDriversUiState>(ListDriversUiState.Loading)
     val uiState: StateFlow<ListDriversUiState> get() = _uiState
-
-    private val _event = MutableSharedFlow<ListDriversEvent>()
-    val event: SharedFlow<ListDriversEvent> get() = _event
 
     init {
         // Automatically load data and observe for data changes
@@ -55,7 +50,7 @@ internal class ListDriversViewModel(
             deliveriesRepository.fetchUnscheduledDeliveries().collect { deliveries ->
                 // Report error and bail
                 if (deliveries == null) {
-                    _uiState.value = ListDriversUiState.Error
+                    _uiState.value = ListDriversUiState.Error.LoadingFailed
                     return@collect
                 }
 
@@ -63,8 +58,7 @@ internal class ListDriversViewModel(
                 try {
                     deliveryScheduler.scheduleDeliveries(deliveries)
                 } catch (ex: DeliverySchedulerException) {
-                    _event.tryEmit(ListDriversEvent.SchedulingFailed)
-                    _uiState.value = ListDriversUiState.Error
+                    _uiState.value = ListDriversUiState.Error.SchedulingFailed
                     return@collect
                 }
 
