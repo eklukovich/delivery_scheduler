@@ -13,6 +13,15 @@ import org.jgrapht.generate.SimpleWeightedBipartiteGraphMatrixGenerator
 import org.jgrapht.graph.DefaultWeightedEdge
 import org.jgrapht.graph.SimpleWeightedGraph
 
+/**
+ * [DeliveryScheduler] implementation that uses the Kuhn Munkres/Hungarian Algorithm to
+ * assign drivers to shipments that will maximize the total suitability score.
+ *
+ * This implementation uses the JGraphT library for the Hungarian Algorithm implementation.
+ *
+ * More about the algorithm: https://en.wikipedia.org/wiki/Hungarian_algorithm
+ * More about JGraphT Lib: https://jgrapht.org/
+ */
 internal class HungarianAlgorithmDeliveryScheduler(
     private val suitabilityScoreGenerator: SuitabilityScoreGenerator = SuitabilityScoreGenerator()
 ): DeliveryScheduler {
@@ -21,6 +30,10 @@ internal class HungarianAlgorithmDeliveryScheduler(
 
     private var driverToShipmentMap: Map<Driver, ScheduledDelivery> = emptyMap()
 
+    /**
+     * Assigns the drivers to shipments to maximize the suitability score and stores the results.
+     * Results should be obtained through the [getScheduleForDriver] method.
+     */
     @Throws(DeliverySchedulerException::class)
     override fun scheduleDeliveries(deliveries: Deliveries) {
         // Only support an equal number of drivers and shipments
@@ -46,6 +59,9 @@ internal class HungarianAlgorithmDeliveryScheduler(
         driverToShipmentMap = createScheduledDriverMap(result)
     }
 
+    /**
+     * Returns the [ScheduledDelivery] for the provided driver, or null if not found
+     */
     override fun getScheduleForDriver(driver: Driver): ScheduledDelivery? {
         return driverToShipmentMap[driver]
     }
@@ -90,16 +106,17 @@ internal class HungarianAlgorithmDeliveryScheduler(
         val driverVertexList = drivers.map { Vertex.DriverVertex(it) }
         val shipmentVertexList = shipments.map { Vertex.ShipmentVertex(it) }
 
-        // Create the graph
+        // Create empty graph
         val target = SimpleWeightedGraph<Vertex, DefaultWeightedEdge>(DefaultWeightedEdge::class.java)
 
-        val generator = SimpleWeightedBipartiteGraphMatrixGenerator<Vertex, DefaultWeightedEdge>()
+        // Generate a weighted bipartite graph
+        SimpleWeightedBipartiteGraphMatrixGenerator<Vertex, DefaultWeightedEdge>()
             .first(driverVertexList)
             .second(shipmentVertexList)
             .weights(suitabilityMatrix)
+            .generateGraph(target)
 
-        generator.generateGraph(target)
-
+        // Perform assignment matching
         return KuhnMunkresMinimalWeightBipartitePerfectMatching(
             target,
             driverVertexList.toSet(),
@@ -114,6 +131,8 @@ internal class HungarianAlgorithmDeliveryScheduler(
                 val sourceVertex = result.graph.getEdgeSource(edge)
                 val targetVertex = result.graph.getEdgeTarget(edge)
 
+                // Get the matched driver and shipment from the edge.
+                // Source/Target order not guaranteed so check both sides
                 val driver = (sourceVertex as? Vertex.DriverVertex)?.driver ?: (targetVertex as Vertex.DriverVertex).driver
                 val shipment = (sourceVertex as? Vertex.ShipmentVertex)?.shipment ?: (targetVertex as Vertex.ShipmentVertex).shipment
 

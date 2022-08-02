@@ -7,7 +7,6 @@ import com.eklukovich.deliveryscheduler.repository.model.Driver
 import com.eklukovich.deliveryscheduler.scheduler.DeliveryScheduler
 import com.eklukovich.deliveryscheduler.scheduler.HungarianAlgorithmDeliveryScheduler
 import com.eklukovich.deliveryscheduler.scheduler.model.DeliverySchedulerException
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
