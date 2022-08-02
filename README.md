@@ -1,5 +1,5 @@
 
-# Objective
+## Objective
 The primary objective is to build an Android application that displays a list of drivers from a set of JSON values. When the user taps a driver, the assigned shipment must be displayed where the driver's suitability score (SS) is maximized across all drivers and shipments. Each driver can only have one shipment and each shipment can only have one driver.
 
 The suitability score is calculated as follows:
@@ -7,7 +7,7 @@ The suitability score is calculated as follows:
 - If the shipment's street name length is odd, the base SS is 1x the number of consonants in the driver’s name
 - If the length of the shipment's street name and length of the driver’s name share any common factors other than 1, the base SS is increased by 50% 
 
-# Approach
+## Approach
 This section provides an overview of the assumptions and the approach taken for the design and implementation of this app. 
 
 ### Assumptions
