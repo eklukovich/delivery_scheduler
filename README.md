@@ -47,3 +47,7 @@ This application uses the Hungarian Algorithm to match the drivers to shipments,
 
 # Usage
 The app displays a list of drivers and will initially not have shipment assigned to them. Tap any of the drivers and the assigned shipment address for that driver will appear underneath the driver's name and a green check mark will appear.
+
+<p align="left">
+  <img src="https://github.com/eklukovich/delivery_scheduler/blob/master/screenshot.png" width="350">
+</p>
