@@ -6,6 +6,7 @@ import com.eklukovich.deliveryscheduler.repository.DeliveriesRepository
 import com.eklukovich.deliveryscheduler.repository.model.Driver
 import com.eklukovich.deliveryscheduler.scheduler.DeliveryScheduler
 import com.eklukovich.deliveryscheduler.scheduler.HungarianAlgorithmDeliveryScheduler
+import com.eklukovich.deliveryscheduler.scheduler.model.DeliverySchedulerException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -46,7 +47,11 @@ internal class ListDriversViewModel(
                 _uiState.value = ListDriversUiState.Success(drivers = deliveries.drivers)
 
                 // Schedule all the new deliveries
-                deliveryScheduler.scheduleDeliveries(deliveries)
+                try {
+                    deliveryScheduler.scheduleDeliveries(deliveries)
+                } catch (ex: DeliverySchedulerException) {
+                    // TODO: Send error event
+                }
             }
         }
     }

@@ -2,6 +2,7 @@ package com.eklukovich.deliveryscheduler.scheduler
 
 import com.eklukovich.deliveryscheduler.repository.model.Deliveries
 import com.eklukovich.deliveryscheduler.repository.model.Driver
+import com.eklukovich.deliveryscheduler.scheduler.model.DeliverySchedulerException
 import com.eklukovich.deliveryscheduler.scheduler.model.ScheduledDelivery
 
 /**
@@ -13,6 +14,7 @@ internal interface DeliveryScheduler {
     /**
      * Method to schedule all the deliveries that is maximized for best suitability
      */
+    @Throws(DeliverySchedulerException::class)
     fun scheduleDeliveries(deliveries: Deliveries)
 
     /**
