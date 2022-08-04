@@ -23,24 +23,24 @@ class SuitabilityScoreGeneratorTest {
     @Test
     fun `even destination street name and no common factors`() {
         val result = generator.generate("Joker", "Gotham")
-        assertThat(result).isEqualTo(3.0f)
+        assertThat(result).isEqualTo(3.0)
     }
 
     @Test
     fun `even destination street name and common factors`() {
         val result = generator.generate("The Riddler", "Gotham City")
-        assertThat(result).isEqualTo(6.75f)
+        assertThat(result).isEqualTo(6.75)
     }
 
     @Test
     fun `odd destination street name and no common factors`() {
         val result = generator.generate("Batman", "Batcave")
-        assertThat(result).isEqualTo(4.0f)
+        assertThat(result).isEqualTo(4.0)
     }
 
     @Test
     fun `odd destination street name and common factors`() {
         val result = generator.generate("Penguin", "Batcave")
-        assertThat(result).isEqualTo(6f)
+        assertThat(result).isEqualTo(6.0)
     }
 }
